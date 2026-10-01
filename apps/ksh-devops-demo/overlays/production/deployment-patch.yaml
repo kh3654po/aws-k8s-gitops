@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ksh-devops-demo
+
+spec:
+  replicas: 2
+
+  template:
+    metadata:
+      labels:
+        environment: production
