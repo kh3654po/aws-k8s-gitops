@@ -5,7 +5,7 @@ metadata:
   name: ksh-devops-demo
 
 spec:
-  replicas: 2
+  replicas: 3
 
   template:
     metadata:
