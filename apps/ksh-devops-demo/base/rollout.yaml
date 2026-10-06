@@ -47,12 +47,24 @@ spec:
       steps:
         - setWeight: 10
 
-        - pause:
-            duration: 2m
+        - analysis:
+            templates:
+              - templateName: ksh-devops-demo-canary-analysis
+
+                args:
+                  - name: service-name
+                    value: >-
+                      ksh-devops-demo-canary.ksh-devops-demo.svc.cluster.local
 
         - setWeight: 50
 
-        - pause:
-            duration: 2m
+        - analysis:
+            templates:
+              - templateName: ksh-devops-demo-canary-analysis
+
+                args:
+                  - name: service-name
+                    value: >-
+                      ksh-devops-demo-canary.ksh-devops-demo.svc.cluster.local
 
         - setWeight: 100

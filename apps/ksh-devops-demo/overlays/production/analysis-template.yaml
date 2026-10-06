@@ -1,0 +1,91 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+
+metadata:
+  name: ksh-devops-demo-canary-analysis
+
+spec:
+  args:
+    - name: service-name
+
+  metrics:
+    # Canary request count
+    - name: request-count
+
+      initialDelay: 45s
+      interval: 30s
+      count: 2
+
+      successCondition: >-
+        len(result) > 0 &&
+        result[0] >= 20
+
+      failureCondition: >-
+        len(result) == 0 ||
+        result[0] < 20
+
+      failureLimit: 1
+
+      provider:
+        prometheus:
+          address: >-
+            http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+
+          timeout: 10
+
+          query: |
+            sum(
+              increase(
+                istio_requests_total{
+                  reporter="source",
+                  destination_service="{{ args.service-name }}"
+                }[1m]
+              )
+            )
+
+
+    # Canary HTTP success rate
+    - name: success-rate
+
+      initialDelay: 45s
+      interval: 30s
+      count: 2
+
+      successCondition: >-
+        len(result) > 0 &&
+        !isNaN(result[0]) &&
+        result[0] >= 0.95
+
+      failureCondition: >-
+        len(result) == 0 ||
+        isNaN(result[0]) ||
+        result[0] < 0.95
+
+      failureLimit: 1
+
+      provider:
+        prometheus:
+          address: >-
+            http://kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090
+
+          timeout: 10
+
+          query: |
+            sum(
+              increase(
+                istio_requests_total{
+                  reporter="source",
+                  destination_service="{{ args.service-name }}",
+                  response_code!~"5.*"
+                }[1m]
+              )
+            )
+            /
+            sum(
+              increase(
+                istio_requests_total{
+                  reporter="source",
+                  destination_service="{{ args.service-name }}"
+                }[1m]
+              )
+            )

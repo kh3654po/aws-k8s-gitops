@@ -8,6 +8,7 @@ resources:
   - ../../base
   - gateway.yaml
   - virtualservice.yaml
+  - analysis-template.yaml
 
 patches:
   - path: deployment-patch.yaml
