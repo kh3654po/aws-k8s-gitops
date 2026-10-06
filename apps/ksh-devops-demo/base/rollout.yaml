@@ -12,7 +12,10 @@ metadata:
 spec:
   replicas: 1
 
-  revisionHistoryLimit: 3
+  revisionHistoryLimit: 5
+
+  rollbackWindow:
+    revisions: 3
 
   selector:
     matchLabels:
