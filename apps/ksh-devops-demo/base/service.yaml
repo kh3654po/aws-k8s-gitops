@@ -2,7 +2,31 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: ksh-devops-demo
+  name: ksh-devops-demo-stable
+
+  labels:
+    app.kubernetes.io/name: ksh-devops-demo
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: ksh-devops-project
+
+spec:
+  type: ClusterIP
+
+  selector:
+    app.kubernetes.io/name: ksh-devops-demo
+
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: ksh-devops-demo-canary
 
   labels:
     app.kubernetes.io/name: ksh-devops-demo

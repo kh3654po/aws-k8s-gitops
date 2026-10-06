@@ -6,9 +6,12 @@ namespace: ksh-devops-demo
 resources:
   - namespace.yaml
   - ../../base
+  - gateway.yaml
+  - virtualservice.yaml
 
 patches:
   - path: deployment-patch.yaml
+  - path: rollout-patch.yaml
 
 images:
   - name: ksh-devops-demo

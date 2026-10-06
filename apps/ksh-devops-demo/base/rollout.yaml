@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+
+metadata:
+  name: ksh-devops-demo
+
+  labels:
+    app.kubernetes.io/name: ksh-devops-demo
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: ksh-devops-project
+
+spec:
+  replicas: 1
+
+  revisionHistoryLimit: 3
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ksh-devops-demo
+
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: ksh-devops-demo
+
+    scaleDown: progressively
+
+  strategy:
+    canary:
+      stableService: ksh-devops-demo-stable
+      canaryService: ksh-devops-demo-canary
+
+      maxUnavailable: 0
+      maxSurge: 25%
+
+      trafficRouting:
+        istio:
+          virtualService:
+            name: ksh-devops-demo
+
+            routes:
+              - primary
+
+      steps:
+        - setWeight: 10
+
+        - pause:
+            duration: 2m
+
+        - setWeight: 50
+
+        - pause:
+            duration: 2m
+
+        - setWeight: 100

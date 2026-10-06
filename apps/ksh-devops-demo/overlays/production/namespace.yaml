@@ -7,3 +7,5 @@ metadata:
   labels:
     app.kubernetes.io/part-of: ksh-devops-project
     environment: production
+
+    istio-injection: enabled

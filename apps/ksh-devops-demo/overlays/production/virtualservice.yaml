@@ -1,0 +1,32 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+
+metadata:
+  name: ksh-devops-demo
+
+spec:
+  hosts:
+    - ksh-devops-demo.local
+
+  gateways:
+    - ksh-devops-demo-gateway
+
+  http:
+    - name: primary
+
+      route:
+        - destination:
+            host: ksh-devops-demo-stable
+
+            port:
+              number: 80
+
+          weight: 100
+
+        - destination:
+            host: ksh-devops-demo-canary
+
+            port:
+              number: 80
+
+          weight: 0
