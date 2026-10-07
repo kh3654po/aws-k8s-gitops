@@ -17,4 +17,4 @@ patches:
 images:
   - name: ksh-devops-demo
     newName: 985704340726.dkr.ecr.ap-northeast-2.amazonaws.com/ksh-devops-demo
-    newTag: sha-114732cde485-run-37574242469-2
+    newTag: sha-ef9a6464d1c2-run-37578981364-1
